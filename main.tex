@@ -40,7 +40,7 @@
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
-\author{Maiur Minar Rahman\inst{1}\orcidID{0000-1111-2222-3333} \and
+\author{Matiur Rahman Minar\inst{1}\orcidID{0000-0002-3128-2915} \and
 Thai Thanh Tuan\inst{2,3}\orcidID{1111-2222-3333-4444} \and
 Heejune Ahn\inst{3}\orcidID{2222--3333-4444-5555}  \and
 Paul Rosin\inst{3}\orcidID{2222--3333-4444-5555}   \and
@@ -60,52 +60,52 @@ Cardiff University, Cardiff, 69121 Heidelberg, UK
 
 \begin{abstract}
 
-Image-based virtual try-on (VTON) has drawn increasing attraction for on-line apparel shopping mainly because not requiring 3D information of try-on cloths and target humans. However, the existing 2D algorithms, even utilizing advanced non-rigid deformation algorithm, could not handle the 3D shape change for the posture of target human. In this study, we propose  the 3D cloth reconstruction method using 3D human body model. The 3D model of try-on cloth can be more easily when applied to the rest posed standards human model. Thereafter the pose and shape of cloth can be transferred to the ones of the target humans estimated from an 2D image. Finally the deformed cloth model can be rendered and blended together with unchanged cloth and human parts. The experimental results with a open dataset shows the reconstructed cloth shapes are significantly more natural compared with the 2D imaged based deformation result, when the human pose and shape are estimated accurately.         
+Image-based virtual try-on (VTON) has drawn increasing attraction for online apparel shopping, mainly because of not requiring 3D information of try-on clothes and target humans. However, the existing 2D algorithms, even utilizing the advanced non-rigid deformation algorithm, can not handle the 3D shape changes for the postures of target humans. In this study, we propose the 3D cloth reconstruction method using 3D human body model. The 3D model of try-on cloth can be more easily deformed when applied to the rest posed standards human model. Thereafter the pose and shape of cloth can be transferred to the ones of the target humans estimated from an 2D image. Finally the deformed cloth model can be rendered and blended together with unchanged cloth and human parts. The experimental results with a open dataset shows the reconstructed cloth shapes are significantly more natural compared to the 2D imaged based deformation results, when the human pose and shape are estimated accurately.         
 
-\keywords{We would like to encourage you to list your keywords within
-the abstract section}
+\keywords{3D Model, SMPL, 3D Reconstruction, Cloth deformation, Virtual Try-on}
 \end{abstract}
 
 
 \section{Introduction}
 
-Online fashion market has been growing rapidly every year. Unlike electronics, which makes it easy to standardize functions and performances, fashion apparel are infinite variations in   style, forms, colors, texture, and materials.  Also the difference between personal preferences is huge. As a result, clothing purchasing decisions are very difficult to make with current un-customized information, like the cloth and models' try fit images. Therefore, virtual try-on (VTON) is a highly demanding technology for the on-line shopping. 
+Online fashion market has been growing rapidly every year. Unlike electronics, which makes it easy to standardize functions and performances, fashion apparels have infinite variations in style, forms, colors, texture, and materials.  Also the difference between personal preferences is huge. As a result, clothing purchasing decisions are very difficult to make with current non-customized information, like the cloth and models' try fit images. Therefore, virtual try-on (VTON) is a highly demanding technology for the online shopping. 
 
-The early VTON technologies were based on 3D computer graphics technology that uses 3D models for a target human and clothing, which are usually expensive and difficult to obtain. Therefore, recently 2D image-based VTON technology are studied in academia and industry, fuelled by recent advance in computer vision technology based on deep learning (DL).
-There have been many assumption in problem settings from the general conditional human image generation related to VTON application. We consider the one with a try-on cloth and target human image is a practical condition which is assumed in many papers  VITON[3], CP-VTON[4], and the the following [ ICCV19, ICIP19 ]. Therefore we also consider the VTON problem that use the try-on cloth and human images and generated a new virtual image that the target human replaced the current top or bottom cloth with the try-on cloth. In this paper we limit our application to top cloth only due to the restricted data set but consider the bottom, e.g. pants cases would be easier than top cloth cases.
+The early VTON technologies were based on 3D computer graphics technology that uses 3D models for a target human and clothing, which are usually expensive and difficult to obtain. Therefore, recently 2D image-based VTON technologies are being studied in academia and industry, fueled by the recent advances in computer vision technologies based on deep learning (DL). 
 
-The existing image based algorithms seemingly generate high quality VTON images, but our classified analysis on the cloth style, and human pose and shape reveals significant problems[  ]. One reason of the seemingly high quality in the existing algorithms are mainly due to the low complexity of dataset, i.e., most cloth are short-sleeved, and mono-colored, and the pose of human are mild. Specifically the results with the long-sleeved cloth arm and body posed shows far low quality of the presented result in their papers. We identified 5 issues in  CP-VTON algorithms, some of which are tackled in the following papers. Firstly, the target try-on area is dependent upon current cloth shape. Especially, the neck area pixels are labelled as background and some body area are occluded by hairs or accessories (Fig. 3 (a) left), which affects in cloth warping and blending.  Secondly, all the unintended part, faces, bottom-clothes and legs have to be preserved in blending stage. But other parts except face and hands are missing in CP-VTON human representation and generated at blending stage, which is all right for general synthesis application but not desirable in VTON application (Fig. 3 (b) left). Thirdly, the texture is often not vivid, which is due to the composition. Examining the original loss function of TON network, the term for the composition alpha mask are poorly formulated as simple regularization loss.   
+There have been many assumptions in problem settings from the general conditional human image generation related to VTON application. We consider the one with a try-on cloth and target human image is a practical condition which is assumed in many papers VITON\cite{Han2017VITONAI}, CP-VTON\cite{Wang2018TowardCI} , and the the following  \cite{Sun2019ImageBasedVT,Yu_2019_ICCV}. Therefore we also consider the VTON problem that use the try-on cloth and human images and generated a new virtual image that the target human replaced the current top or bottom cloth with the try-on cloth. In this paper we limit our application to top cloth only due to the restricted data set but consider the bottom, e.g. pants cases would be easier than top cloth cases.
+
+The existing image based algorithms seemingly generate high quality VTON images, but our classified analysis on the cloth styles, and human poses and shapes reveals significant problems[  ]. One reason of the seemingly high quality in the existing algorithms are mainly due to the low complexity of the dataset, i.e., most clothes are short-sleeved, and mono-colored, and the poses of humans are mild. Specifically the results with the long-sleeved cloth arm and body posed shows far low quality of the presented result in their papers. We identified 5 issues in CP-VTON\cite{Wang2018TowardCI} algorithms, some of which are tackled in the following papers. Firstly, the target try-on area is dependent upon current cloth shape. Especially, the neck area pixels are labeled as background and some body areas are occluded by hairs or accessories (Fig. 3 (a) left), which affects in cloth warping and blending. Secondly, all the unintended part, faces, bottom-clothes and legs have to be preserved in blending stage. But other parts except face and hair are missing in CP-VTON\cite{Wang2018TowardCI} human representation and generated at blending stage, which is all right for general synthesis application but not desirable in VTON application (Fig. 3 (b) left). Thirdly, the texture is often not vivid, which is due to the composition. Examining the original loss function of TON network, the term for the composition alpha mask are poorly formulated as simple regularization loss.   
 
 \begin{equation}
 L = c_1 | I_0-I_{GT} |+  c_2 L_{VGG}+c_3 |1-M_0 |        
- \end{equation} 
+\end{equation} 
 
-Fourthly, because no label the area of warped cloth in the same color as background, i.e., white are confused and improperly processed in the blending stage (Fig. 3 (c))
-Finally, GMM module using Spatial Transform Network with TPS (Thin Plate Spline) deformation cannot handle strong 3-D deformation due to the target pose and also generates artifacts because of the person representation inputs. For examples, hands-up and folded arms.  Note that many errors in the warping stage are often hidden in the blending stage when the cloth are single-colored, which can be expected in practical conditions (Fig. 3 (d)).
+Fourthly, since no label in the area of warped cloth is the same color as background, white colored clothes are confused and improperly processed in the blending stage (Fig. 3 (c))
+Finally, GMM module using Spatial Transform Network\cite{JaderbergSZK15} with TPS (Thin Plate Spline)\cite{Bookstein1989PrincipalWT} deformation cannot handle strong 3D deformation due to the target pose and also generates artifacts because of the person representation inputs. For example, hands-up and folded arms.  Note that many errors in the warping stage are often hidden in the blending stage when the target clothes are single-colored, which can be expected in practical conditions (Fig. 3 (d)).
 
-In this paper, we focus on the last but most difficult problems that can be solved in pure 2-D image based algorithm. The 3D cloth deformation is inherently difficult for 2D warping metthod, including non-rigid one, like TPS algorithm, we propose to first reconstruct 3D model of try-on cloth, then apply the the pose and shape transfer for the target human, and finally blending with unchanged image contents like the face, bottom cloth, and background. Therefore the one of main task now is to reconstruct 3D cloth model from 2-D try-on cloth image. The 3D cloth model reconstruction have been studied in previous studies [    ] but still needs significant improvement for general condition. Our key idea in this step is that  once we can control the human pose and shape to become similar to the try-on cloth's, the 3D reconstruction process can be made much easier and the reconstruction quality would be much higher than general pose and shape condition. 
+In this paper, we focus on the last but most difficult problems that cannot be solved in pure 2D image-based algorithm. The 3D cloth deformation is inherently difficult for 2D warping method, including non-rigid one, like TPS algorithm, we propose to first reconstruct 3D model of try-on cloth, then apply the pose and shape transfer for the target human, and finally blending with unchanged image contents like the face, bottom cloth, and background. Therefore, one of main the tasks now is to reconstruct 3D cloth model from 2D try-on cloth image. The 3D cloth model reconstruction have been studied in previous studies [    ] but still needs significant improvement for general condition. Our key idea in this step is that once we can control the human pose and shape to become similar to the try-on cloth's, the 3D reconstruction process can be made much easier and the reconstruction quality would be much higher than general pose and shape condition. 
 
-So in the Section 3, we describe the 3D cloth reconstruction algorithm. we divide the reconstruction step into 2D matching of cloth to the standard body silhouette and 3D reconstruction of cloth. The later 3D reconstruction step is done through the SMPLify algorithm for the SMPL 3D body model.  In Section 4, the blending method described, where the 3D cloth model are transferred to the target human images, through SMPL body parameters of shapes and poses. Then the transferred 3D is rendered and blended to the target human image. In this step we reused the 2D VTON blending algorithm with the modification for the condition.  The sampled results from dataset are presented in Section 5 and the paper is concluded in Section 6. In addition to our main study, we added the classified quality evaluation of the previous 2D image based VTON algorithms for the  completeness of the paper.     
+So in the Section \ref{section:3dclothrecon}, we describe the 3D cloth reconstruction algorithm. we divide the reconstruction step into 2D matching of cloth to the standard body silhouette and 3D reconstruction of cloth. The later 3D reconstruction step is done through the SMPLify\cite{Bogo2016SMPLify} algorithm for the SMPL 3D body model\cite{Loper2015SMPLAS}.  In Section 4, the blending method described, where the 3D cloth model are transferred to the target human images, through SMPL body parameters of shapes and poses. Then the transferred 3D is rendered and blended to the target human image. In this step we reused the 2D VTON blending algorithm with the modification for the condition.  The sampled results from dataset are presented in Section 5 and the paper is concluded in Section 6. In addition to our main study, we added the classified quality evaluation of the previous 2D image based VTON algorithms for the  completeness of the paper.
 
 
 \section{Classified Image Based Performance Evaluation}
 
 \subsection{Image-based VTON}
 
-In this Section, we started with evaluating the 2D image based VTON algorithms. We considered CP-VTON published in 2018 as the benchmarking algorithm. The previous and following in 2019 share same input image and information conditions with CP-VTON and compare the results with it. Here we include the SCM based-VTON, VITON, and  CP-VTON, but believe the performance strength and weakness are similar in the other algorithms too.
+In this Section, we started with evaluating the 2D image based VTON algorithms. We considered CP-VTON\cite{Wang2018TowardCI} published in 2018 as the benchmark algorithm. The previous and following in 2019 share same input image and information conditions with CP-VTON and compare the results with it. Here we include the SCM based-VTON, VITON\cite{Han2017VITONAI}, and  CP-VTON\cite{Wang2018TowardCI}, however, we believe the performance strength and weakness are similar in the other algorithms too.
 
 
-The Image based VTON algorithms are mostly composed of two stages: (1) cloth warping step that warps the try-on cloth to align with the pose and shape of the target model (called GMM in CP-VTON: geometric Manipulation Module), and (2) blending step that blends the warped cloth onto the target human image (called TON in CP-VTON: Try-On Network). CP-VTON assumes the target human image is pre-processed for a cloth agnostic human representation by a human pose estimation like OpenPose [  ] and human parsing like LIP[ ]. The human representation is composed of 1) heat maps for each joints 2) silhouette of human body, and 3) face and skin pixels patches (non-cloth and human identity area). We use the same dataset collected by Han et al. used in VITON and CP-TON papers.
+The Image based VTON algorithms are mostly composed of two stages: (1) cloth warping step that warps the try-on cloth to align with the pose and shape of the target model (called GMM in CP-VTON: geometric Manipulation Module)\cite{Wang2018TowardCI}, and (2) blending step that blends the warped cloth onto the target human image (called TON in CP-VTON: Try-On Network)\cite{Wang2018TowardCI}. CP-VTON assumes the target human image is pre-processed for a cloth agnostic human representation by a human pose estimation like OpenPose\cite{Cao2018OpenPoseRM} and human parsing like LIP\cite{Liang2018LookIP}. The human representation is composed of 1) heat maps for each joints 2) silhouette of human body, and 3) face and skin pixels patches (non-cloth and human identity area). We use the same dataset collected by Han et al. used in VITON\cite{Han2017VITONAI} and CP-VTON\cite{Wang2018TowardCI} papers.
  
 
 \subsection{Classified quality}
 
-Even though the success and failure cases are presented and compared with other algorithms' results, the failure case analysis is not enough for understanding the origin of failure cases and therefore difficult to find the solution for them. A classified evaluation would be better for this understanding. Here we summarized the classified results from our another study. We classify input try-on cloth and target human images according to the posture and body type of the person, the degree of occlusion of the clothes, and the characteristics of the clothes. Quality is compared in IoU for the warping step and in SSIM for the final blending step for same cloth re-try-on cases. We also tested for the new cloth try-on cases but not include here for limitation of space, and the same cloth cases are enough to explain the tendency of performance. Though in general CP-VTON generates the best quality image, the relative comparison is not the main purpose of the analysis. 
+Even though the success and failure cases are presented and compared with other algorithms' results, the failure case analysis is not enough for understanding the origin of failure cases and therefore difficult to find the solution for them. A classified evaluation would be better for this understanding. Here we summarized the classified results from our another study. We classify input try-on cloth and target human images according to the posture and body type of the person, the degree of occlusion of the clothes, and the characteristics of the clothes. Quality is compared in IoU for the warping step and in SSIM for the final blending step for same cloth re-try-on cases. We also tested for the new cloth try-on cases but did not include here for limitation of spaces, and the same cloth cases are enough to explain the tendencies of the performances. Though in general CP-VTON generates the best quality image, the relative comparison is not the main purpose of the analysis. Please refer to Figure \ref{fig:classified2DVTONresult} for detailed results.
 
 
 \begin{figure}
 \centering
-\includegraphics[height=13.5cm]{figures/2dvton_same.png}   % TODO
+\includegraphics[height=13.5cm, scale=1]{figures/2dvton_same.png}   % TODO
 \caption{Classified VTON result: same clothes}
 \label{fig:classified2DVTONresult}
 \end{figure}
@@ -118,27 +118,27 @@ Here I will describe the evaluation discussion, finally commenting that the GMM 
 
 ////
 
-Especially note that the warped cloth are often too much different for desired shape. It is originated two facts. First the 3D deformation that any 2D deformation including non-rigid transform such as TPS is quite limited, especially any 2D deformation cannot handle when the two area in the original image are overlapped in the destination images. There for when the arms of long sleeved cloth occlude the main body, 2D warping cannot approximate the 3D deformation properly. Second, the deformation needs corresponding points  between the source nd target image. The cloth are extremely difficult object to find the corresponding points. The STN (spatial transform network) and SCM (shape context matching) cannot find the corresponding points when the target cloth and original cloth has different shapes. In conclusion, the 2D image based algorithm has serious limitation in the range of applications. It can apply to the mild posed target human only and simple short sleeved cloth, mainly because the inherent limitation of 2D deformation method including non-rigid ones, and the poor performance of matching algorithm.  To overcome this limitation, we consider to model the try-on cloth into 3D model and apply the 3D deformation
+Especially note that the warped cloth are often too much different for desired shape. It is originated two facts. First the 3D deformation that any 2D deformation including non-rigid transform such as TPS is quite limited, especially any 2D deformation cannot handle when the two area in the original image are overlapped in the destination images. There for when the arms of long sleeved cloth occlude the main body, 2D warping cannot approximate the 3D deformation properly. Second, the deformation needs corresponding points  between the source nd target image. The cloth are extremely difficult object to find the corresponding points. The STN (spatial transform network)\cite{JaderbergSZK15} and SCM (shape context matching)\cite{BelongieMP02} cannot find the corresponding points when the target cloth and original cloth has different shapes. In conclusion, the 2D image based algorithm has serious limitation in the range of applications. It can apply to the mild posed target human only and simple short sleeved cloth, mainly because the inherent limitation of 2D deformation method including non-rigid ones, and the poor performance of matching algorithm.  To overcome this limitation, we consider to model the try-on cloth into 3D model and apply the 3D deformation
 
 
-\section{3D model reconstrcuction of cloth} 
+\section{3D model reconstruction of cloth} \label{section:3dclothrecon}
 
 \subsection{Overview} 
 
-For 3D human body model, we use Skinned Multi-Person Linear model (SMPL), because SMPL has well defined control variable for shape and pose and also well defined parameter estimation  algorithms. For similar reasons, SMPL have been utilized in many research works. Furthermore because it is based on blend skinning, SMPL is compatible with existing rendering engines and we make it available for research purposes. SMPL is a skinned vertex-based model that accurately represents a wide variety of body shapes in natural human poses. The parameters of the model are learned from data including the rest pose template, blend weights, pose-dependent blend shapes, identity-dependent blend shapes, and a regressor from vertices to joint locations. Unlike previous models, the pose-dependent blend shapes are a linear function of the elements of the pose rotation matrices. This simple formulation enables training the entire model from a relatively large number of aligned 3D meshes of different people in different poses. 
+For 3D human body model, we use Skinned Multi-Person Linear model (SMPL)\cite{Loper2015SMPLAS}, because SMPL has well defined control variable for shape and pose and also well defined parameter estimation  algorithms. For similar reasons, SMPL have been utilized in many research works. Furthermore because it is based on blend skinning, SMPL is compatible with existing rendering engines and we make it available for research purposes. SMPL is a skinned vertex-based model that accurately represents a wide variety of body shapes in natural human poses. The parameters of the model are learned from data including the rest pose template, blend weights, pose-dependent blend shapes, identity-dependent blend shapes, and a regressor from vertices to joint locations. Unlike previous models, the pose-dependent blend shapes are a linear function of the elements of the pose rotation matrices. This simple formulation enables training the entire model from a relatively large number of aligned 3D meshes of different people in different poses. \cite{Loper2015SMPLAS} 
 
 
-For estimating the SMPL parameters, we use SMPLify method in this study. However any other methods can be used because we assume nothing on the procedure and use estimated parameters only. SMPLify use 2D human body joint information often obtained from deep learning based method like DeepCut or OpenPose, and minimize the projected joint locations and the given (considered true) 2D joint locations. The cost function can include other priors and silhouette information. We made minor optimization for half body dataset, such as joint location mapping between the joints of used fashion data set and SMPLify joint definition, and conditional inclusion of invisible joints and initialization step.  From our experiments with all 2032 test images, we found that the SMPLify quality should be much improved for fully automatic application to VTON application. So the result included in this paper excluded the bad matching cases which is around 30\% of all test images.    
+For estimating the SMPL parameters, we use SMPLify\cite{Bogo2016SMPLify} method in this study. However any other methods can be used because we assume nothing on the procedure and use estimated parameters only. SMPLify uses 2D human body joint information often obtained from deep learning based method like DeepCut or OpenPose, and minimize the projected joint locations and the given (considered true) 2D joint locations. The cost function can include other priors and silhouette information. We made minor optimization for half body dataset, such as joint location mapping between the joints of used fashion data set and SMPLify joint definition, and conditional inclusion of invisible joints and initialization step.  From our experiments with all 2032 test images, we found that the SMPLify quality should be much improved for fully automatic application to VTON application. So the result included in this paper excluded the bad matching cases which is around 30\% of all test images.    
   
-Clothed human reconstruction using SMPL have been studied in several previous works [PhotoWakeup and Rummians....].
-Even we are successful in modelling human body, there are further difficulty to recover the clothed human model from body model. It is because the cloth vertices are not directly corresponds to the human body's, and even though it has it is still difficult to estimate the difference between two. Also the texture of cloth can be occluded by other part of cloth and human body parts. The previous work try to solve the problem in the given image condition. Therefore the results are strongly dependent upon the input image.
+Clothed human reconstruction using SMPL have been studied in several previous works \cite{Weng2018PhotoW3,Zanfir2018HumanAT}.
+Even we are successful in modeling human body, there are further difficulty to recover the clothed human model from body model. It is because the cloth vertices are not directly corresponds to the human body's, and even though it has it is still difficult to estimate the difference between two. Also the texture of cloth can be occluded by other part of cloth and human body parts. The previous work try to solve the problem in the given image condition. Therefore the results are strongly dependent upon the input image.
 In this paper, we make this step easy using simple standard human pose, where all frontal part of cloth is well separated and visible. This setup cannot handle all problem in the clothed human model reconstruction but can greatly make it easy.   
 The following subsection describe the procedure in details.
 
 
 \begin{figure}
 \centering
-\includegraphics[height=4.5cm]{figures/pipeline.png}   % TODO
+\includegraphics[height=4.5cm, scale=1]{figures/pipeline.png}   % TODO
 \caption{Pipeline}
 \label{fig:piepline}
 \end{figure}
@@ -146,7 +146,7 @@ The following subsection describe the procedure in details.
 \subsection{2D Standard Cloth matching}
 
 
-To align the try-on cloth image with 3D SMPL body model, first their dimension spaces should be matched. Natural way would be first rendering the SMPL body model into 2D image space. However, again the matching with cloth image and body silhouette is not a simple task, for simplicity we assume we can segment the silhouette so that the the remaining area can be easily matched by SCM algorithms. We argue that this step can be monitored by service provider which is practically acceptable; the manual operation from the customer in the try-on step would be not acceptable in general service environment.   
+To align the try-on cloth image with 3D SMPL body model\cite{Loper2015SMPLAS}, first their dimension spaces should be matched. Natural way would be first rendering the SMPL body model into 2D image space. However, again the matching with cloth image and body silhouette is not a simple task, for simplicity we assume we can segment the silhouette so that the the remaining area can be easily matched by SCM algorithms. We argue that this step can be monitored by service provider which is practically acceptable; the manual operation from the customer in the try-on step would be not acceptable in general service environment.   
 
 \begin{equation}
 (I_{c, warped}, M_{c, warped})  = T_{SMPL} ((I_c, M_c))
@@ -155,7 +155,7 @@ To align the try-on cloth image with 3D SMPL body model, first their dimension s
 
 \begin{figure}
 \centering
-\includegraphics[height=6.5cm]{figures/2dmatching.png}   % TODO
+\includegraphics[height=6.5cm, scale=0.7]{figures/2dmatching.png}   % TODO
 \caption{2D Matching}
 \label{fig:2DmatchingOfClothAndBody}
 \end{figure}
@@ -181,7 +181,7 @@ Discussions needed
 
 \begin{figure}
 \centering
-%\includegraphics[height=6.5cm]{figures/3dclothrecon.png}   % TODO
+%\includegraphics[height=6.5cm, scale=1]{figures/3dclothrecon.png}   % TODO
 \caption{3D reconstructed cloth}
 \label{fig:3DreconstructedCloth}
 \end{figure}
@@ -193,7 +193,7 @@ Discussions needed
 
 \subsection{Transfer of 3D cloth model to the target Human} 
 
-The 3D model and texture information obtained above are for the standard shape and posed person. To apply this information to the target human image, we have to apply the shape and pose parameters of estimated from SMPLify step.  In stead of apply the shape and pose parameters to the obtained clothed 3D model, we transferred the displacement of cloth vertices to the target human body model, because the application of new parameters to the Body model provide much natural results.      
+The 3D model and texture information obtained above are for the standard shape and posed person. To apply this information to the target human image, we have to apply the shape and pose parameters of estimated from SMPLify\cite{Bogo2016SMPLify} step.  In stead of apply the shape and pose parameters to the obtained clothed 3D model, we transferred the displacement of cloth vertices to the target human body model, because the application of new parameters to the Body model provide much natural results.      
 
 Multiple option can be considered for the transferring. We could transfer the physical size of cloth or keep the fit, i.e., keep the displacement from the body to cloth vertex as before.  We simply decide the Fit-preserving option for showing more natural results for final fitting.  
 
@@ -228,15 +228,15 @@ The displacement is expressed in the local coordinates and then used the same wa
 
 This part is under implementation.
 
-We first tried to use TOM. But we found when the reconsruction is not perfect the bledning is not natural 
+We first tried to use TOM. But we found when the reconstruction is not perfect the blending is not natural 
 
 Other option is first reconstruct all the clothed information from the target user and overlay the transferred cloth.
 
 
 \begin{figure}
 \centering
-\includegraphics[height=6.5cm]{figures/vton_result1.png} 
-\includegraphics[height=6.5cm]{figures/vton_result2.png} 
+\includegraphics[height=6.5cm, scale=1]{figures/vton_result1.png} 
+\includegraphics[height=6.5cm, scale=1]{figures/vton_result2.png} 
 \caption{VTON results}
 \label{fig:vtonresults}
 \end{figure}
@@ -246,84 +246,12 @@ Other option is first reconstruct all the clothed information from the target us
 
 \section{Conclusions}
 
-In this paper, we proposed 3D cloth model reconstruction method using single cloth image. Leveraging the 3D body model, we can make it easy to reconstruct 3D shape information. The 3D cloth model is used for transferring the cloth to target human model.  The transferred clothed can be integrated with the human image contents for realizing the pose and shape changes which can not be realizable by existing image based VTON methods.
+In this paper, we proposed 3D cloth model reconstruction method using single cloth image. Leveraging the 3D body model, we can make it easy to reconstruct 3D shape information. The 3D cloth model is used for transferring the cloth to target human model.  The transferred clothes can be integrated with the human image contents for realizing the pose and shape changes which can not be realizable by existing image based VTON methods.
 
-However, the algorithms in each step of the pipeline are not perfect and has many thing to improve at present. Especially the in-accuracy in estimating human pose and shape make the integrated VTON results is not natural enough. Therefore we can consider to improve the SMPLify algorithm or use different blending step that suit for the 3D model input.
+However, the algorithms in each step of the pipeline are not perfect and have many things to improve at present. Especially the in-accuracy in estimating human pose and shape makes the integrated VTON results not natural enough. Therefore we can consider to improve the SMPLify\cite{Bogo2016SMPLify} algorithm or use different blending step that suits for the 3D model input.
      
 
-   
-
-\begin{thebibliography}{9}
-
-\bibitem{Lopper16} 
-M. Loper, N. Mahmood, J. Romero, G. Pons-Moll, and  M. J. Black.
-\textit{SMPL: A skinned multi-person linear model.}
-ACM transactions on graphics (TOG), Vol. 34, No. 6, 248, 2016
-
-\bibitem{Bogo16} 
-F. Bogo, A. Kanazawa, C. Lassner, P. Gehler, J. Romero, and M. J. Black.
-\textit{Keep it SMPL: Automatic estimation of 3D human pose and shape from a single image.}
-In European Conference on Computer Vision (EECV 2016) pp. 561-578, Oct. 2016.
-
-% Add SMPL-X etc 
-
-\bibitem{Wang18}  
-B. Wang, H. Zheng, X. Liang, Y. Chen, L. Lin, and M. Yang, M.
-\textit{Toward characteristic-preserving image-based virtual try-on network.}
-Proc. of the European Conference on Computer Vision, pp. 589-604, 2018
-
-\bibitem{Weng19}  
-C. Y. Weng,, B. Curless, and I. Kemelmacher-Shlizerman
-\textit{Photo wake-up: 3d character animation from a single photo.}
-In Proc. of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR) pp. 5908-5917, July, 2019.
-
-
-\bibitem{Belongie02}  
-Belongie, S., Malik, J.,  Puzicha, J. 
-\textit{Shape matching and object recognition using shape contexts.}
-IEEE Transactions on PAMI, 25(4), 509-522. 2002
-
-\bibitem{Cao17}  
-Cao, Z., Simon, T., Wei, S. E.,  Sheikh, Y. 
-\textit{Realtime multi-person 2d pose estimation using part affinity fields}
-Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 7291-7299.
-
-\bibitem{Han18}  
-Han, X., Wu, Z., Wu, Z., Yu, R., Davis, L. S.
-\textit{Viton: An image-based virtual try-on network.}
-Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 7543-7552, 2018
-
-\bibitem{Liang18}  
-Liang, X., Gong, K., Shen, X., Lin, L. 
-\textit{Look into person: Joint body parsing and pose estimation network and a new benchmark.}
-IEEE transactions on PAMI, 41(4), 871-885, 2018
-
-%Raj, A., Sangkloy, P., Chang, H., Lu, J., Ceylan, D., & Hays, J. (2018). Swapnet: Garment transfer in single view images.  Proceedings of the European Conference on Computer Vision, pp. 666-682.
-
-\bibitem{Wang18}  
-Wang, B., Zheng, H., Liang, X., Chen, Y., Lin, L., and Yang, M. 
-\textit{Toward characteristic-preserving image-based virtual try-on network.} Proceedings of the European Conference on Computer Vision, pp. 589-604. (2018)
-
-
-\bibitem{Zanfir18}  
-Zanfir, M., Popa, A. I., Zanfir, A., and Sminchisescu, C. 
-\textit{Human appearance transfer}
-Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp. 5391-5399, 2018
-
-%[6] N. Kim, J. C. Yoon, & I. K. Lee, “Image-based dress up system,” In ACM SIGGRAPH'09, p. 35. Aug. 2009.
-
-
-
-\end{thebibliography}
-
-\clearpage\mbox{}Page \thepage\ of the manuscript.
-\clearpage\mbox{}Page \thepage\ of the manuscript.
-
-This is the last page of the manuscript.
-\par\vfill\par
-Now we have reached the maximum size of the ECCV 2020 submission (excluding references).
-References should start immediately after the main text, but can continue on p.15 if needed.
-
+  
 \clearpage
 % ---- Bibliography ----
 %
