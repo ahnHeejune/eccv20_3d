@@ -5,6 +5,16 @@
 
 The 3D model and texture information obtained above are for the standard shape and posed person. To apply this information to the target human image, we have to apply the shape and pose parameters of estimated from SMPLify\cite{Bogo2016SMPLify} step.  In stead of apply the shape and pose parameters to the obtained clothed 3D model, we transferred the displacement of cloth vertices to the target human body model, because the application of new parameters to the Body model provide much natural results.      
 
+
+\begin{figure}[t]
+\centering
+\includegraphics[height=6.5cm, scale=1]{figures/vton_result1.png} 
+\includegraphics[height=6.5cm, scale=1]{figures/vton_result2.png} 
+\caption{VTON results}
+\label{fig:vtonresults}
+\end{figure}
+
+
 Multiple option can be considered for the transferring. We could transfer the physical size of cloth or keep the fit, i.e., keep the displacement from the body to cloth vertex as before.  We simply decide the Fit-preserving option for showing more natural results for final fitting.  
 
 Technically the displacement should be calculated locally. First we calculated the local coordinate at each vertices. We defines the local coordinates: surface normal vector as z -axis, and the vector to smallest indexed edge as x-axis, and their cross product vector as y-axis as the following equations.
@@ -43,13 +53,6 @@ We first tried to use TOM. But we found when the reconstruction is not perfect t
 Other option is first reconstruct all the clothed information from the target user and overlay the transferred cloth.
 
 
-\begin{figure}
-\centering
-\includegraphics[height=6.5cm, scale=1]{figures/vton_result1.png} 
-\includegraphics[height=6.5cm, scale=1]{figures/vton_result2.png} 
-\caption{VTON results}
-\label{fig:vtonresults}
-\end{figure}
 
 
 
