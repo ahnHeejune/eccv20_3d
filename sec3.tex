@@ -2,7 +2,7 @@
 
 \subsection{Overview} 
 
-For 3D human body model, we use Skinned Multi-Person Linear model (SMPL)\cite{Loper2015SMPLAS}, because SMPL has well defined control variable for shape and pose and also well defined parameter estimation  algorithms. For similar reasons, SMPL have been utilized in many research works. Furthermore because it is based on blend skinning, SMPL is compatible with existing rendering engines and we make it available for research purposes. SMPL is a skinned vertex-based model that accurately represents a wide variety of body shapes in natural human poses. The parameters of the model are learned from data including the rest pose template, blend weights, pose-dependent blend shapes, identity-dependent blend shapes, and a regressor from vertices to joint locations. Unlike previous models, the pose-dependent blend shapes are a linear function of the elements of the pose rotation matrices. This simple formulation enables training the entire model from a relatively large number of aligned 3D meshes of different people in different poses. \cite{Loper2015SMPLAS} 
+For 3D human body model, we use Skinned Multi-Person Linear model (SMPL)\cite{Loper2015SMPLAS}, because SMPL has well defined control variables for shape and pose, and well defined parameter estimation algorithms as well. For similar reasons, SMPL\cite{Loper2015SMPLAS} model have been utilized in many research works \cite{Zanfir2018HumanAT,Weng2018PhotoW3}. Furthermore, since it is based on blend skinning, SMPL is compatible with existing rendering engines\cite{Loper2015SMPLAS} and made available for research purposes. SMPL is a skinned vertex-based model that accurately represents a wide variety of body shapes in natural human poses. The parameters of the model are learned from data including the rest pose template, blend weights, pose-dependent blend shapes, identity-dependent blend shapes, and a regressor from vertices to joint locations. Unlike previous models, the pose-dependent blend shapes are a linear function of the elements of the pose rotation matrices. This simple formulation enables training the entire model from a relatively large number of aligned 3D meshes of different people in different poses. \cite{Loper2015SMPLAS} 
 
 
 \begin{figure}[t]
@@ -34,8 +34,8 @@ To align the try-on cloth image with 3D SMPL body model\cite{Loper2015SMPLAS}, f
 
 \begin{figure}[t]
 \centering
-\includegraphics[height=6.5cm, scale=0.7]{figures/2dmatching.png}   % TODO
-\caption{2D Matching}
+\includegraphics[scale=0.4]{figures/2dmatching.png}   % TODO
+\caption{2D matching between clothing image and 3D body model silhouette mask}
 \label{fig:2DmatchingOfClothAndBody}
 \end{figure}
 
@@ -43,7 +43,7 @@ To align the try-on cloth image with 3D SMPL body model\cite{Loper2015SMPLAS}, f
 \subsection{3D cloth model reconstruction }
 
 
-The 3D reconstruction process from aligned cloth image and projected silhouette consists of 2 steps. First, the vertices of 3D body mesh are projected into 2D image space, the boundary  vertices in 2D spaces and the cloth boundaries are used for corresponding points. The corresponding points in the cloth boundary i defined the closest points from the projected vertices.  This step works well in our cases differently from PhotoWakeup study, because the part of body and cloth are not self-overlapped. This is a implementation benefits of our approach. From the corresponding point pairs, a TPS paramter are estimated and applied to the mesh points. The new mesh points are considered the vertices projected from 3D mesh of cloth.    
+The 3D reconstruction process from aligned cloth image and projected silhouette consists of 2 steps. First, the vertices of 3D body mesh are projected into 2D image space, the boundary  vertices in 2D spaces and the cloth boundaries are used for corresponding points. The corresponding points in the cloth boundary i defined the closest points from the projected vertices.  This step works well in our cases differently from Photo Wake-up\cite{Weng2018PhotoW3} study, because the part of body and cloth are not self-overlapped. This is a implementation benefits of our approach. From the corresponding point pairs, a TPS parameter are estimated and applied to the mesh points. The new mesh points are considered the vertices projected from 3D mesh of cloth.    
 
 From the 2D points to 3D points are done with inverse projection with depth obtained from the body with a small constant gap. In reality the gap between the cloth and body cannot be constant but it works with tight or simple clothes. Further research should be needed for accurate depth estimation.   
 
