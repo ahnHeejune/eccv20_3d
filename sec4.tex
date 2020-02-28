@@ -6,15 +6,6 @@
 The 3D model and texture information obtained from 3D reconstruction (Section \ref{section:3dclothrecon}) are for the standard shape and posed person. To apply this information for virtual try-on application, we have to apply the shape and pose parameters of the target human image estimated from SMPLify\cite{Bogo2016SMPLify} step.  Instead of applying the shape and pose parameters to the obtained clothed 3D model, we transfer the displacement of cloth vertices to the target human body model, because the application of new parameters to the Body model provide much better natural results.      
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[height=6.5cm, scale=1]{figures/vton_result1.png} 
-\includegraphics[height=6.5cm, scale=1]{figures/vton_result2.png} 
-\caption{VTON results}
-\label{fig:vtonresults}
-\end{figure}
-
-
 Multiple options can be considered for the transfer. We could transfer the physical size of cloth or keep the fit, i.e., keep the displacement from the body to cloth vertices as before.  We simply decide the fit-preserving option for showing more natural results for final fitting.  
 
 Technically, the displacement should be calculated locally. First, we calculated the local coordinate at each vertices. We define the local coordinates: surface normal vector as z-axis, and the vector to smallest indexed edges as x-axis, and their cross product vector as y-axis as the following equations.
@@ -44,6 +35,8 @@ The displacement is expressed in the local coordinates and then used the same wa
 
 
 \subsection{Blending of warped cloth with target human image}
+
+For our experiment, we used an extended version of Try-on module (TOM) from CP-VTON\cite{Wang2018TowardCI}. We trained  our updated try-on module with the dataset collected by Han et al.\cite{Han2017VITONAI}, and used that trained network for testing with the 3D warped cloth. We updated 3 things from original Try-on module (TOM) of CP-VTON\cite{Wang2018TowardCI} for our implementation. Firstly, we included the un-intended body and clothing areas into the person representation input to Try-on module (TOM) network\cite{Wang2018TowardCI}. Secondly, we included the warped cloth mask into network inputs, so that it can work better for the white-colored clothes. Thirdly, we updated the composite mask loss function\cite{Wang2018TowardCI}.
 
 
 This part is under implementation.
