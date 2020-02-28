@@ -5,22 +5,24 @@
 \begin{tabular}{lccccc}
 
 \includegraphics[width=2cm]{figures/c2dw/000008_1.png}&
+\includegraphics[width=2cm]{figures/arrow_recon.png}&
 \includegraphics[width=2cm]{figures/c3drecon/000008_1_000303_0.png}&
 \includegraphics[width=2cm]{figures/image/000303_0.jpg}&
 \includegraphics[width=2cm]{figures/c3dwfull/000008_1_000303_0.png}&
 \includegraphics[width=2cm]{figures/try-on/000008_1_000303_0.jpg}\\
 
 \includegraphics[width=2cm]{figures/c2dw/000005_1.png}&
+\includegraphics[width=2cm]{figures/arrow_recon.png}&
 \includegraphics[width=2cm]{figures/c3drecon/000005_1_000303_0.png}&
 \includegraphics[width=2cm]{figures/image/000303_0.jpg}&
 \includegraphics[width=2cm]{figures/c3dwfull/000005_1_000303_0.png}&
 \includegraphics[width=2cm]{figures/try-on/000005_1_000303_0.jpg}\\
 
-  Cloth(2D)&Cloth(3D)&Target&Cloth(Warped)&Try-on\\
+  Cloth input(2D)&&Cloth(3D)&Target&Cloth(Warped)&Try-on\\
 
 \end{tabular}
 
-    \caption{We reconstruct 3D cloth model from 2D cloth image. Then, given a target human image, we transfer the target human properties to the reconstructed cloth model and render the warped cloth as in 3D deformed. Finally, we blend the rendered cloth into the target human and generate virtual try-on output image.}
+    \caption{We reconstruct a 3D cloth model from single 2D cloth image. Then, given a target human image, we transfer the reconstructed 3D cloth model properties to the target human image, and render the warped cloth as in 3D deformed. Finally, we blend the rendered cloth into the target human and generate virtual try-on output image.}
     \label{fig:summary}
 \end{figure*}
 
@@ -39,7 +41,7 @@ There have been many assumptions in problem settings from the general conditiona
 \begin{figure}[t]
 \centering
 \includegraphics[scale=0.6]{figures/2dvton_diff.png}
-\caption{Failures of image-based 2D cloth deformations for Virtual Try-On}
+\caption{Failures of image-based 2D cloth deformations for Virtual Try-On (Different clothes pairs)}
 \label{fig:2dvtondiff}
 \end{figure}
 
@@ -53,7 +55,7 @@ L = c_1 | I_0-I_{GT} |+  c_2 L_{VGG}+c_3 |1-M_0 |
 Fourthly, since no label in the area of warped cloth is the same color as background, white colored clothes are confused and improperly processed in the blending stage (Fig. \ref{fig:2dvtondiff} (c))
 Finally, Geometric Matching Module (GMM) using Spatial Transformer Network\cite{JaderbergSZK15} with TPS (Thin Plate Spline)\cite{Bookstein1989PrincipalWT} deformation cannot handle strong 3D deformation due to the target pose, also  generates artifacts due to the person representation inputs. For example, hands-up and folded arms.  Note that many errors in the warping stage are often hidden in the blending stage, especially when the target clothes are single-colored, which can be expected in practical conditions (Figure \ref{fig:2dvtondiff}, \ref{fig:classified2DVTONresult}).
 
-In this paper, we focus on the last but most difficult problems that cannot be solved in pure 2D image-based algorithm. The 3D cloth deformation is inherently difficult for 2D warping method, including non-rigid one, like TPS algorithm, we propose to first reconstruct 3D model of try-on cloth, then apply the pose and shape transfer for the target human, and finally blending with unchanged image contents like the face, bottom cloth, and background. Therefore, one of main the tasks now is to reconstruct 3D cloth model from 2D try-on cloth image. 3D clothed body model reconstruction have been studied in previous works \cite{natsume2019siclope,saito2019pifu}, however it still needs significant improvements for general condition. Our key idea in this step is that, once we can control the human pose and body shape to become similar to the try-on cloth's, the 3D reconstruction process can be made much easier, and the reconstruction quality would be much higher than general pose and shape condition. 
+In this paper, we focus on the last but most difficult problems that cannot be solved in pure 2D image-based algorithm. The 3D cloth deformation is inherently difficult for 2D warping method, including non-rigid one, like TPS algorithm, we propose to first reconstruct 3D model of try-on cloth, then apply the pose and shape transfer for the target human, and finally blending with unchanged image contents like the face, bottom cloth, and background. Therefore, one of main the tasks now is to reconstruct 3D cloth model from 2D try-on cloth image. 3D clothed body model reconstruction have been studied in previous works \cite{natsume2019siclope,saito2019pifu}, however it still needs significant improvements for general condition. Our key idea in this step is that, once we can control the human pose and body shape to become similar to the try-on cloth's, the 3D reconstruction process can be made much easier, and the reconstruction quality would be much higher than general pose and shape condition. Figure \ref{fig:summary} shows a summarized glimpse of our total approach.
 
 Therefore, in the Section \ref{section:3dclothrecon}, we describe the 3D cloth reconstruction algorithm. We divide the reconstruction step into 2D matching of cloth to the standard body silhouette and the 3D reconstruction of cloth. The later 3D reconstruction step is done through the SMPLify\cite{Bogo2016SMPLify} algorithm for the SMPL 3D body model\cite{Loper2015SMPLAS}.  In Section \ref{section:clothtransfer}, we describe the blending method, where the 3D cloth models are transferred to the target human images, through SMPL body parameters of shapes and poses. Then the transferred 3D reconstructed cloth is rendered and blended to the target human image. In this step, we reused the 2D virtual try-on blending algorithm with the modification for the condition.  The sampled results from dataset are presented in Section \ref{section:clothtransfer} and the paper is concluded in Section \ref{section:conclusion}. In addition to our main study, we added the classified quality evaluation of the previous 2D image based virtual try-on algorithms for the completeness of the paper.
 

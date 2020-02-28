@@ -3,7 +3,7 @@
 
 \subsection{Transfer of 3D cloth model to the target Human} 
 
-The 3D model and texture information obtained above are for the standard shape and posed person. To apply this information to the target human image, we have to apply the shape and pose parameters of estimated from SMPLify\cite{Bogo2016SMPLify} step.  In stead of apply the shape and pose parameters to the obtained clothed 3D model, we transferred the displacement of cloth vertices to the target human body model, because the application of new parameters to the Body model provide much natural results.      
+The 3D model and texture information obtained from 3D reconstruction (Section \ref{section:3dclothrecon}) are for the standard shape and posed person. To apply this information for virtual try-on application, we have to apply the shape and pose parameters of the target human image estimated from SMPLify\cite{Bogo2016SMPLify} step.  Instead of applying the shape and pose parameters to the obtained clothed 3D model, we transfer the displacement of cloth vertices to the target human body model, because the application of new parameters to the Body model provide much better natural results.      
 
 
 \begin{figure}[t]
@@ -15,10 +15,10 @@ The 3D model and texture information obtained above are for the standard shape a
 \end{figure}
 
 
-Multiple option can be considered for the transferring. We could transfer the physical size of cloth or keep the fit, i.e., keep the displacement from the body to cloth vertex as before.  We simply decide the Fit-preserving option for showing more natural results for final fitting.  
+Multiple options can be considered for the transfer. We could transfer the physical size of cloth or keep the fit, i.e., keep the displacement from the body to cloth vertices as before.  We simply decide the fit-preserving option for showing more natural results for final fitting.  
 
-Technically the displacement should be calculated locally. First we calculated the local coordinate at each vertices. We defines the local coordinates: surface normal vector as z -axis, and the vector to smallest indexed edge as x-axis, and their cross product vector as y-axis as the following equations.
- 
+Technically, the displacement should be calculated locally. First, we calculated the local coordinate at each vertices. We define the local coordinates: surface normal vector as z-axis, and the vector to smallest indexed edges as x-axis, and their cross product vector as y-axis as the following equations.
+
 
 \begin{align}
  u_{z} =  normal(V_{body})  \\
@@ -30,7 +30,7 @@ Technically the displacement should be calculated locally. First we calculated t
  where $N_V$ is the neighbor vertex of $V$.
  
 
-The displacement is expressed in the local coordinates and then used the same way in the new target body surfaces for location transfer
+The displacement is expressed in the local coordinates and then used the same way in the new target body surfaces for location transfer.
 
 \begin{equation}
 \overrightarrow{d} = (d_x, d_y, d_z) = V_{clothed} - V_{body} \: in \: (u_x, u_y, u_z | V_{body})
