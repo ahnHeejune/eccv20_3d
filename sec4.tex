@@ -3,7 +3,7 @@
 
 \subsection{Transfer of 3D cloth model to the target Human} 
 
-The 3D model and texture information obtained from 3D reconstruction (Section \ref{section:3dclothrecon}) are for the standard shape and posed person. To apply this information for virtual try-on application, we have to apply the shape and pose parameters of the target human image estimated from SMPLify\cite{Bogo2016SMPLify} step.  Instead of applying the shape and pose parameters to the obtained clothed 3D model, we transfer the displacement of cloth vertices to the target human body model, because the application of new parameters to the Body model provide much better natural results.      
+The 3D model and texture information obtained from 3D reconstruction (Section \ref{section:3dclothrecon}) are for the standard shape and posed person. To apply this information for virtual try-on application, we have to apply the shape and pose parameters of the target human image estimated from SMPLify\cite{Bogo2016SMPLify} step. Instead of applying the shape and pose parameters to the obtained clothed 3D model, we transfer the displacement of cloth vertices to the target human body model, since the application of new parameters to the body model provide much better natural results. (Figure \ref{fig:clothtransfertryon})
 
 
 Multiple options can be considered for the transfer. We could transfer the physical size of cloth or keep the fit, i.e., keep the displacement from the body to cloth vertices as before.  We simply decide the fit-preserving option for showing more natural results for final fitting.  
@@ -34,23 +34,38 @@ The displacement is expressed in the local coordinates and then used the same wa
 
 
 
-\subsection{Blending of warped cloth with target human image}
+\begin{figure*}[t]
+   \centering
+\begin{tabular}{cccccccc}
 
-For our experiment, we used an extended version of Try-on module (TOM) from CP-VTON\cite{Wang2018TowardCI}. We trained  our updated try-on module with the dataset collected by Han et al.\cite{Han2017VITONAI}, and used that trained network for testing with the 3D warped cloth. We updated 3 things from original Try-on module (TOM) of CP-VTON\cite{Wang2018TowardCI} for our implementation. Firstly, we included the un-intended body and clothing areas into the person representation input to Try-on module (TOM) network\cite{Wang2018TowardCI}. Secondly, we included the warped cloth mask into network inputs, so that it can differentiate the target cloth area regardless of cloth color. Thirdly, we updated the composite mask loss function\cite{Wang2018TowardCI}. In the mask loss term in Try-on module loss function\cite{Wang2018TowardCI}, we replaced the Composition Mask with supervised ground truth mask for a strong alpha mask.
+\includegraphics[width=1cm]{figures/image/001715_0.jpg}&
+\includegraphics[width=1cm]{figures/c2dw/015077_1.png}&
+\includegraphics[width=1cm]{figures/arrow_recon.png}&
+\includegraphics[width=1cm]{figures/c3drecon/015077_1_001715_0.png}&
+\includegraphics[width=1cm]{figures/arrow_transfer.png}&
+\includegraphics[width=1cm]{figures/c3dwfull/015077_1_001715_0.png}&
+\includegraphics[width=1cm]{figures/arrow_blending.png}&
+\includegraphics[width=1cm]{figures/try-on/015077_1_001715_0.jpg}\\
+
+Target&Cloth(2D)&&Cloth(3D)&&Cloth(Warped)&&Try-on\\
+
+\end{tabular}
+
+    \caption{Transfer of 3D cloth model to the target Human and Virtual Try-On}
+    \label{fig:clothtransfertryon}
+    
+\end{figure*}
+
+
+
+\subsection{Blending of warped cloth with target human image}  \label{section:tryon}
+
+For our experiment, we used an extended version of Try-on module (TOM) from CP-VTON\cite{Wang2018TowardCI}. We trained  our updated try-on module with the dataset collected by Han et al.\cite{Han2017VITONAI}, and used that trained network for testing with the 3D warped cloth (Figure \ref{fig:clothtransfertryon}). We updated 3 things from original Try-on module (TOM) of CP-VTON\cite{Wang2018TowardCI} for our implementation. Firstly, we included the un-intended body and clothing areas into the person representation input to Try-on module (TOM) network\cite{Wang2018TowardCI}. Secondly, we included the warped cloth mask into network inputs, so that it can differentiate the target cloth area regardless of cloth color. Thirdly, we updated the composite mask loss function\cite{Wang2018TowardCI}. In the mask loss term in Try-on module loss function\cite{Wang2018TowardCI}, we replaced the Composition Mask with supervised ground truth mask for a strong alpha mask.
 
 
 \begin{equation}
 L = \lambda_{L1} || I_0-I_{GT}||_1+  \lambda_{VGG} L_{VGG} + \lambda_{mask} ||M_{GT}-M_o||_1       
 \end{equation}
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[height=6.5cm, scale=1]{figures/vton_result1.png} 
-\includegraphics[height=6.5cm, scale=1]{figures/vton_result2.png} 
-\caption{VTON results}
-\label{fig:vtonresults}
-\end{figure}
 
 
 However, using 3D warped clothes as in warped clothes inputs to try-on module network, do not provide highly satisfactory results as expected, compared to the qualities improved in the warped clothes. We assume that this is due to the mismatch in warped clothes, between training data inputs to our testing data inputs. Therefore, we think it would be better to train the blending network, i.e., the try-on module with 3D warped clothes, generated by our approach for further improvements. We may think of using other options as well. For instance, we can reconstruct all the clothed information from the target user and overlay the transferred cloth.

@@ -3,7 +3,7 @@
 
 \subsection{Experiments}
 
-
+Our approach is composed of 4 main stages. Such as - (1) 2D matching between try-on cloth image and SMPL\cite{Loper2015SMPLAS} model silhouette, 
 
 
 
@@ -53,5 +53,38 @@ Try-on cloth&Target human&GMM\cite{Wang2018TowardCI})&TOM\cite{Wang2018TowardCI}
 
 
 
-
 Figure \ref{fig:testresults} shows qualitative comparison results between the state-of-the-art image-based virtual try-on model CP-VTON\cite{Wang2018TowardCI} and our approach.
+
+
+
+\subsection{Failure cases}
+
+Although, our approach can reconstruct fashion clothes while preserving the clothing characteristics e.g. texture, color, shape realistically, there are cases where it fails to transfer cloth model to the target human and later in try-on. Especially the cases where SMPLify\cite{Bogo2016SMPLify} optimizations are mismatched. Additionally, as mentioned in Section \ref{section:tryon}, due to differences in training data and testing data of try-on/blending network, final try-on outputs gets worse.
+
+
+
+\begin{figure*}[t]
+   \centering
+\begin{tabular}{cccc}
+
+\includegraphics[width=1cm]{figures/c2dw/000118_1.png}&
+\includegraphics[width=1cm]{figures/image/000118_0.jpg}&
+\includegraphics[width=1cm]{figures/c3dwfull/000118_1_000118_0.png}&
+\includegraphics[width=1cm]{figures/try-on/000118_1_000118_0.jpg}\\
+
+\includegraphics[width=1cm]{figures/c2dw/004508_1.png}&
+\includegraphics[width=1cm]{figures/image/004508_0.jpg}&
+\includegraphics[width=1cm]{figures/c3dwfull/004508_1_004508_0.png}&
+\includegraphics[width=1cm]{figures/try-on/004508_1_004508_0.jpg}\\
+
+Cloth(2D)&Target&Cloth(Warped)&Try-on\\
+
+\end{tabular}
+
+    \caption{Failure cases}
+    \label{fig:clothtransfertryon}
+    
+\end{figure*}
+
+
+
