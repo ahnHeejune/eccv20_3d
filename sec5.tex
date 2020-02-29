@@ -4,15 +4,54 @@
 \subsection{Experiments}
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[height=6.5cm, scale=1]{figures/vton_result1.png} 
-\includegraphics[height=6.5cm, scale=1]{figures/vton_result2.png} 
-\caption{VTON results}
-\label{fig:vtonresults}
-\end{figure}
+
 
 
 \subsection{Results}
 
-Figure \ref{fig:vtonresults} shows same cloth paired qualitative comparison results between the state-of-the-art image-based virtual try-on model CP-VTON\cite{Wang2018TowardCI} and our approach.
+
+
+\begin{figure*}[t]
+   \centering
+\begin{tabular}{cc|cc|cc}
+
+Try-on cloth&Target human&GMM\cite{Wang2018TowardCI})&TOM\cite{Wang2018TowardCI})&Warped(Ours)&Try-on(Ours)\\
+
+\includegraphics[width=2cm]{figures/cloth/002353_1.jpg}&
+\includegraphics[width=2cm]{figures/image/007029_0.jpg}&
+\includegraphics[width=2cm]{figures/cp-vton/warp-cloth/002353_1_007029_0.jpg}&
+\includegraphics[width=2cm]{figures/cp-vton/try-on/002353_1_007029_0.jpg}&
+\includegraphics[width=2cm]{figures/c3dwfull/002353_1_007029_0.png}&
+\includegraphics[width=2cm]{figures/try-on/002353_1_007029_0.jpg}\\
+
+\includegraphics[width=2cm]{figures/cloth/016962_1.jpg}&
+\includegraphics[width=2cm]{figures/image/005379_0.jpg}&
+\includegraphics[width=2cm]{figures/cp-vton/warp-cloth/016962_1_005379_0.jpg}&
+\includegraphics[width=2cm]{figures/cp-vton/try-on/016962_1_005379_0.jpg}&
+\includegraphics[width=2cm]{figures/c3dwfull/016962_1_005379_0.png}&
+\includegraphics[width=2cm]{figures/try-on/016962_1_005379_0.jpg}\\
+
+\includegraphics[width=2cm]{figures/cloth/002353_1.jpg}&
+\includegraphics[width=2cm]{figures/image/019581_0.jpg}&
+\includegraphics[width=2cm]{figures/cp-vton/warp-cloth/002353_1_019581_0.jpg}&
+\includegraphics[width=2cm]{figures/cp-vton/try-on/002353_1_019581_0.jpg}&
+\includegraphics[width=2cm]{figures/c3dwfull/002353_1_019581_0.png}&
+\includegraphics[width=2cm]{figures/try-on/002353_1_019581_0.jpg}\\
+
+\includegraphics[width=2cm]{figures/cloth/016962_1.jpg}&
+\includegraphics[width=2cm]{figures/image/019402_0.jpg}&
+\includegraphics[width=2cm]{figures/cp-vton/warp-cloth/016962_1_019402_0.jpg}&
+\includegraphics[width=2cm]{figures/cp-vton/try-on/016962_1_019402_0.jpg}&
+\includegraphics[width=2cm]{figures/c3dwfull/016962_1_019402_0.png}&
+\includegraphics[width=2cm]{figures/try-on/016962_1_019402_0.jpg}\\
+
+\end{tabular}
+
+    \caption{Qualitative comparison between the baseline CP-VTON\cite{Wang2018TowardCI} and our approach. For each row, first pair of images are the inputs, try-on cloth and target human. Second pair is the warped cloth and final try-on results of CP-VTON\cite{Wang2018TowardCI}. And last pair includes the results of our approach; 3D reconstructed-deformed cloth, and the try-on results from the blending network.}
+    \label{fig:testresults}
+\end{figure*}
+
+
+
+
+Figure \ref{fig:testresults} shows qualitative comparison results between the state-of-the-art image-based virtual try-on model CP-VTON\cite{Wang2018TowardCI} and our approach.
